@@ -31,8 +31,8 @@ body { padding:20px; }
 
 .belt {
   display: flex;
-  align-items: center;
-  gap: 0; /* JSで横間隔を設定 */
+  align-items: center; /* 中央揃えで余白を上下均等に */
+  gap: 0; /* 横間隔はそのままなし */
   will-change: transform;
 }
 
@@ -51,41 +51,44 @@ main { position: relative; z-index:1; }
 
 <div class="bg" aria-hidden="true">
 
+  <!-- 1段目（左に流れる） -->
   <div class="row row1">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row1/1.png">
-      <img src="assets/row1/2.png">
-      <img src="assets/row1/3.png">
-      <img src="assets/row1/4.png">
-      <img src="assets/row1/5.png">
-          </div>
-  </div>
-
-  <div class="row row2">
-    <div class="belt js-loop" data-dir="right">
-      <img src="assets/row2/6.png">
-      <img src="assets/row2/7.png">
-      <img src="assets/row1/8.png">
-      <img src="assets/row1/9.png">
-      <img src="assets/row1/10.png">
+      <img src="assets/row1/1.png" alt="Image 1">
+      <img src="assets/row1/2.png" alt="Image 2">
+      <img src="assets/row1/3.png" alt="Image 3">
+      <img src="assets/row1/4.png" alt="Image 4">
+      <img src="assets/row1/5.png" alt="Image 5">
     </div>
   </div>
 
+  <!-- 2段目（右に流れる） -->
+  <div class="row row2">
+    <div class="belt js-loop" data-dir="right">
+      <img src="assets/row2/6.png" alt="Image 6">
+      <img src="assets/row2/7.png" alt="Image 7">
+      <img src="assets/row2/8.png" alt="Image 8">
+      <img src="assets/row2/9.png" alt="Image 9">
+      <img src="assets/row2/10.png" alt="Image 10">
+    </div>
+  </div>
+
+  <!-- 3段目（左に流れる） -->
   <div class="row row3">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row3/11.png">
-      <img src="assets/row3/12.png">
-      <img src="assets/row3/13.png">
-      <img src="assets/row1/14.png">
-      <img src="assets/row1/15.png">
-          </div>
+      <img src="assets/row3/11.png" alt="Image 11">
+      <img src="assets/row3/12.png" alt="Image 12">
+      <img src="assets/row3/13.png" alt="Image 13">
+      <img src="assets/row3/14.png" alt="Image 14">
+      <img src="assets/row3/15.png" alt="Image 15">
+    </div>
   </div>
 
 </div>
 
 <main>
-  <h1>メッセージ Ver.8</h1>
-  <p>3段背景スライド＋縦横比固定＋横間隔も余白対応</p>
+  <h1>メッセージ Ver.9</h1>
+  <p>3段背景スライド＋縦横比固定＋横間隔なし（中央揃えで余白均等）</p>
 </main>
 
 <script>
@@ -93,15 +96,11 @@ main { position: relative; z-index:1; }
 document.querySelectorAll('.js-loop').forEach(belt => {
   const row = belt.parentElement;
   const rowHeight = row.clientHeight;
-  const verticalMargin = rowHeight * 0.01; // 上下余白1%
   
-  // 画像間隔を設定
+  // 画像高さを99%に設定
   const imgs = belt.querySelectorAll('img');
   imgs.forEach((img, i) => {
-    img.style.height = rowHeight * 0.99 + 'px';
-    if(i < imgs.length - 1){
-      img.style.marginRight = verticalMargin + 'px';
-    }
+    img.style.height = rowHeight * 0.99 + 'px'; // 縦99%
   });
 
   // ループアニメーション
