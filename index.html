@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>3段スライド背景 Ver.15</title>
+  <title>3段スライド背景 Ver.16</title>
   <style>
     /* ===== ベース余白 ===== */
     html, body {
@@ -45,14 +45,16 @@
       position: absolute;
       left: 0;
       right: 0;
-      height: 33.3333vh; /* 画面高さの 1/3 */
+      height: 99vh; /* 画面高さの 99% */
+      top: 50%; /* 中央揃え */
+      transform: translateY(-50%); /* 上下中央揃え */
       overflow: hidden;
     }
 
     /* 段の配置 */
-    .row1 { top: 0; }
-    .row2 { top: 33.3333vh; }
-    .row3 { top: 66.6666vh; }
+    .row1 { top: 0%; }
+    .row2 { top: 33.3333%; }
+    .row3 { top: 66.6666%; }
 
     /* ベルト：横並びで流す */
     .row .belt {
@@ -165,8 +167,8 @@
 
   <!-- ===== 本文（この上に背景が固定表示されます） ===== -->
   <main>
-    <h1>メッセージ Ver.15</h1>
-    <p>3段の画像が左・右・左に流れる背景、縦横比が保持されます。</p>
+    <h1>メッセージ Ver.16</h1>
+    <p>3段の画像が左・右・左に流れる背景、縦横比が保持されます。高さは99%で上下中央揃え。</p>
   </main>
 
 </body>
