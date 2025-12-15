@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.7</title>
+<title>3段スライド背景 Ver.10</title>
 <style>
 html, body { margin:0; padding:0; }
 body { padding:20px; }
@@ -87,31 +87,44 @@ main { position: relative; z-index:1; }
 </div>
 
 <main>
-  <h1>メッセージ Ver.9</h1>
+  <h1>メッセージ Ver.10</h1>
   <p>3段背景スライド＋縦横比固定＋横間隔なし（中央揃えで余白均等）</p>
 </main>
 
 <script>
-// 全てのベルトを初期化
+// 画面サイズ変更時に画像の高さを調整
+function updateImageSize() {
+  // 各段の高さを取得
+  document.querySelectorAll('.js-loop').forEach(belt => {
+    const row = belt.parentElement;
+    const rowHeight = row.clientHeight;
+    
+    // 画像高さを99%に設定
+    const imgs = belt.querySelectorAll('img');
+    imgs.forEach(img => {
+      img.style.height = rowHeight * 0.99 + 'px'; // 縦99%
+    });
+  });
+}
+
+// 初回の読み込み時にサイズ調整
+updateImageSize();
+
+// 画面サイズ変更時にリサイズを適用
+window.addEventListener('resize', updateImageSize);
+
+// ループ処理
 document.querySelectorAll('.js-loop').forEach(belt => {
   const row = belt.parentElement;
-  const rowHeight = row.clientHeight;
-  
-  // 画像高さを99%に設定
-  const imgs = belt.querySelectorAll('img');
-  imgs.forEach((img, i) => {
-    img.style.height = rowHeight * 0.99 + 'px'; // 縦99%
-  });
-
-  // ループアニメーション
-  let x = 0;
   const dir = belt.dataset.dir === 'right' ? 1 : -1;
+  let x = 0;
   const speed = 0.5; // px/frame
+
   const loop = () => {
     x += speed * dir;
     const w = belt.scrollWidth / 2; // 半分ループで戻す
-    if(dir < 0 && -x >= w) x = 0;
-    if(dir > 0 && x >= w) x = 0;
+    if (dir < 0 && -x >= w) x = 0;
+    if (dir > 0 && x >= w) x = 0;
     belt.style.transform = `translateX(${x}px)`;
     requestAnimationFrame(loop);
   };
