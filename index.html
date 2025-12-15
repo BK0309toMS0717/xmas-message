@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.10</title>
+<title>3段スライド背景 Ver.11</title>
 <style>
 html, body { margin:0; padding:0; }
 body { padding:20px; }
@@ -70,6 +70,12 @@ main { position: relative; z-index:1; }
       <img src="assets/row2/8.png" alt="Image 8">
       <img src="assets/row2/9.png" alt="Image 9">
       <img src="assets/row2/10.png" alt="Image 10">
+      <!-- 2周目（ループ対応） -->
+      <img src="assets/row2/6.png" alt="Image 6">
+      <img src="assets/row2/7.png" alt="Image 7">
+      <img src="assets/row2/8.png" alt="Image 8">
+      <img src="assets/row2/9.png" alt="Image 9">
+      <img src="assets/row2/10.png" alt="Image 10">
     </div>
   </div>
 
@@ -81,13 +87,19 @@ main { position: relative; z-index:1; }
       <img src="assets/row3/13.png" alt="Image 13">
       <img src="assets/row3/14.png" alt="Image 14">
       <img src="assets/row3/15.png" alt="Image 15">
+      <!-- 2周目（ループ対応） -->
+      <img src="assets/row3/11.png" alt="Image 11">
+      <img src="assets/row3/12.png" alt="Image 12">
+      <img src="assets/row3/13.png" alt="Image 13">
+      <img src="assets/row3/14.png" alt="Image 14">
+      <img src="assets/row3/15.png" alt="Image 15">
     </div>
   </div>
 
 </div>
 
 <main>
-  <h1>メッセージ Ver.10</h1>
+  <h1>メッセージ Ver.11</h1>
   <p>3段背景スライド＋縦横比固定＋横間隔なし（中央揃えで余白均等）</p>
 </main>
 
@@ -129,7 +141,7 @@ document.querySelectorAll('.js-loop').forEach(belt => {
     requestAnimationFrame(loop);
   };
 
-  // 複製してループ対応（画像が少なくてもつなぎ目なし）
+  // ループ対応（画像が少なくてもつなぎ目なし）
   belt.innerHTML += belt.innerHTML;
 
   loop();
