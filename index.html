@@ -67,12 +67,20 @@
     .row1 img {
       filter: saturate(1.05) contrast(1.05);
     }
-    
+    .row3 .belt {
+      animation: slideLeft 40s linear infinite;
+    }
+
+    .row3 img {
+      filter: saturate(1.05) contrast(1.05);
+    }
 /* 2段目だけ右へ流す */
 .row2 .belt {
   animation: slide-right 40s linear infinite;
 }
-
+.row2 img {
+      filter: saturate(1.05) contrast(1.05);
+}
 /* 3段の行の高さを統一（好みで数値を変えてOK） */
 .bg {
   --row-height: 180px; /* ←ここを好みの高さに */
@@ -162,4 +170,4 @@
   <h1>私のオリジナル Web ページ</h1>
   <p>ここに好きな文章を書いていきましょう！</p>
   <p>完成後に Adobe 無料体験を解約するのを忘れずに!!!</p>
-<p>ver1</p>
+<p>ver2</p>
