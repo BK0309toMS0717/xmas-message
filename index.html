@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.11</title>
+<title>3段スライド背景 Ver.13</title>
 <style>
 html, body { margin:0; padding:0; }
 body { padding:20px; }
@@ -99,8 +99,8 @@ main { position: relative; z-index:1; }
 </div>
 
 <main>
-  <h1>メッセージ Ver.11</h1>
-  <p>3段背景スライド＋縦横比固定＋横間隔なし（中央揃えで余白均等）</p>
+  <h1>メッセージ Ver.13</h1>
+  <p>ロマンチックなスライドショーに最適化（遅めの流れ）</p>
 </main>
 
 <script>
@@ -125,14 +125,15 @@ updateImageSize();
 // 画面サイズ変更時にリサイズを適用
 window.addEventListener('resize', updateImageSize);
 
-// ループ処理
+// ループ処理（速度を遅めに設定）
 document.querySelectorAll('.js-loop').forEach(belt => {
   const row = belt.parentElement;
   const dir = belt.dataset.dir === 'right' ? 1 : -1;
   let x = 0;
-  const speed = 0.5; // px/frame
+  const speed = 0.2; // 画像が流れるスピード（遅め）
 
   const loop = () => {
+    // 移動量の計算を一定に保つ
     x += speed * dir;
     const w = belt.scrollWidth / 2; // 半分ループで戻す
     if (dir < 0 && -x >= w) x = 0;
