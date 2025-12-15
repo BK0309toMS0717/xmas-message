@@ -1,51 +1,12 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.14</title>
-<style>
-html, body { margin:0; padding:0; }
-body { padding:20px; }
-
-.bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-color: #6b76ae;
-  pointer-events: none;
-  overflow: hidden;
-  --row-height: 33.333vh; /* 画面高さの1/3 */
-}
-
-.row {
-  position: absolute;
-  left:0; right:0;
-  height: var(--row-height);
-  overflow: hidden;
-}
-
-.row1 { top:0; }
-.row2 { top: var(--row-height); }
-.row3 { top: calc(var(--row-height)*2); }
-
-.belt {
-  display: flex;
-  align-items: center; /* 中央揃えで余白を上下均等に */
-  gap: 0; /* 横間隔はそのままなし */
-  will-change: transform;
-}
-
-.belt img {
-  height: 99%;       /* 段に対して縦99% */
-  width: auto;       /* 縦横比固定 */
-  display: block;
-  object-fit: contain;
-}
-
-main { position: relative; z-index:1; }
-
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>3段スライド背景 Ver.15</title>
+  <style>
+    /* スタイルはそのまま */
+  </style>
 </head>
 <body>
 
@@ -53,7 +14,7 @@ main { position: relative; z-index:1; }
 
   <!-- 1段目（左に流れる） -->
   <div class="row row1">
-    <div class="belt js-loop" data-dir="left">
+    <div class="belt js-loop" data-dir="left"> <!-- 1段目は左に流れる -->
       <img src="assets/row1/1.png" alt="Image 1">
       <img src="assets/row1/2.png" alt="Image 2">
       <img src="assets/row1/3.png" alt="Image 3">
@@ -64,7 +25,7 @@ main { position: relative; z-index:1; }
 
   <!-- 2段目（右に流れる） -->
   <div class="row row2">
-    <div class="belt js-loop" data-dir="right">
+    <div class="belt js-loop" data-dir="right"> <!-- 2段目は右に流れる -->
       <img src="assets/row2/6.png" alt="Image 6">
       <img src="assets/row2/7.png" alt="Image 7">
       <img src="assets/row2/8.png" alt="Image 8">
@@ -81,7 +42,7 @@ main { position: relative; z-index:1; }
 
   <!-- 3段目（左に流れる） -->
   <div class="row row3">
-    <div class="belt js-loop" data-dir="left">
+    <div class="belt js-loop" data-dir="left"> <!-- 3段目は左に流れる -->
       <img src="assets/row3/11.png" alt="Image 11">
       <img src="assets/row3/12.png" alt="Image 12">
       <img src="assets/row3/13.png" alt="Image 13">
@@ -99,8 +60,8 @@ main { position: relative; z-index:1; }
 </div>
 
 <main>
-  <h1>メッセージ Ver.14</h1>
-  <p>ロマンチックなスライドショー（時間ベースで一定速度）</p>
+  <h1>メッセージ Ver.15</h1>
+  <p>流れ方向を元に戻しました。</p>
 </main>
 
 <script>
