@@ -1,92 +1,106 @@
 
-<!DOCTYPE html><!
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>オリジナルページ</title>
-    <style>
-        
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1段スライド（row1）</title>
-<style>
-  /* 本文の見た目 */
-  body { font-family: sans-serif; margin: 0; color: #fff; }
-  .content { position: relative; z-index: 1; padding: 2rem; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>オリジナルページ</title>
 
-  /* 背景全体（画面背面に固定） */
-  .bg { position: fixed; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; filter: brightness(0.9); }
+  <style>
+    /* =========================================
+       共通：本文
+    ==========================================*/
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
 
-  /* 1段目だけ使う（上1/3の高さ） */
-  .row { position: absolute; left: 0; right: 0; overflow: hidden; }
-  .row1 { top: 0; height: 33.333vh; }
+    p { margin: 0; }
+    p + p { margin-top: 0.4rem; }
 
-  /* ベルト：横並び＆アニメ対象 */
-  .row .belt { display: flex; align-items: center; gap: 2rem; will-change: transform; }
-  .row img { height: 100%; object-fit: cover; opacity: 0.95; }
+    /* =========================================
+             背景スライド（1段目だけ）
+    ==========================================*/
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      filter: brightness(0.9);
+    }
 
-  /* 左へ流れるアニメーション
-     ─ 同じ並びを2回連続で置くので、-50% で継ぎ目ゼロにできる ─ */
-  @keyframes slideLeft {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-  .row1 .belt { animation: slideLeft 40s linear infinite; } /* 速度は好みで 30–60s */
+    .row {
+      position: absolute;
+      left: 0; right: 0;
+      overflow: hidden;
+    }
 
-  /* （任意）画像の色調チューニング */
-  .row1 img { filter: saturate(1.05) contrast(1.05); }
-</style>
+    .row1 {
+      top: 0;
+      height: 33.333vh;
+    }
+
+    .row .belt {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      will-change: transform;
+    }
+
+    .row img {
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.95;
+    }
+
+    /* 左へ流れるアニメーション */
+    @keyframes slideLeft {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .row1 .belt {
+      animation: slideLeft 40s linear infinite;
+    }
+
+    .row1 img {
+      filter: saturate(1.05) contrast(1.05);
+    }
+  </style>
 </head>
+
 <body>
 
-  <!-- 背景：1段目だけ -->
+  <!-- 背景スライド：1段目 -->
   <div class="bg" aria-hidden="true">
     <div class="row row1">
       <div class="belt">
-        <!-- ★ row1 の画像（同じ並びを2回続けるのがポイント） -->
+
+        <!-- 1周目 -->
         row1/img01.jpg
         row1/img02.jpg
         row1/img03.jpg
         row1/img04.jpg
         row1/img05.jpg
 
-        <!-- 2周目（上と同じ順番をもう一度） -->
+        <!-- 2周目（継ぎ目を消すために同じ並びを繰り返す） -->
         row1/img01.jpg
         row1/img02.jpg
         row1/img03.jpg
         row1/img04.jpg
         row1/img05.jpg
+
       </div>
     </div>
   </div>
 
-  <!-- 上に載せる本文（自由に編集） -->
-  <div class="content">
-    <h1>1段目を作成しました</h1>
-    <p>row1 の画像が左へ流れます。速度や間隔は後で調整できます。</p>
-  </div>
+  <!-- 本文 -->
+  <h1>私のオリジナル Web ページ</h1>
+  <p>ここに好きな文章を書いていきましょう！</p>
+  <p>完成後に Adobe 無料体験を解約するのを忘れずに!!!</p>
 
 </body>
-``
 
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #fafafa;
-        }
-        
-p{ margin: 0; }
-    p+p{ margin-top: 0.4rem; } 
-
-    </style>
-</head>
-<body>
-    <h1>私のオリジナル Web ページ</h1>
-    <p>ここに好きな文章を書いていきましょう！<br>
-    <p>完成後にAdobe無料体験を解約するのを忘れずに!!!</p>
-</body>
