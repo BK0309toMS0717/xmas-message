@@ -67,6 +67,30 @@
     .row1 img {
       filter: saturate(1.05) contrast(1.05);
     }
+    
+/* 3段の行の高さを統一（好みで数値を変えてOK） */
+.bg {
+  --row-height: 180px; /* ←ここを好みの高さに */
+}
+
+/* 各行の高さを固定して、はみ出しを隠す */
+.bg .row {
+  height: var(--row-height);
+  overflow: hidden;
+}
+
+/* ベルト内の画像を等高さ＆自然比率で表示 */
+.bg .belt img {
+  height: 100%;     /* 行の高さに合わせる */
+  width: auto;      /* 横幅は画像の比率に合わせて自動 */
+  display: block;   /* 画像下の隙間対策 */
+}
+
+/* インライン配置ならスペース潰し（必要なら） */
+.bg .belt {
+  font-size: 0;     /* 画像の間の余白が出る場合の対策 */
+}
+
   </style>
 </head>
 
