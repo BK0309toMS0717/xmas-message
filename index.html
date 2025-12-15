@@ -68,6 +68,11 @@
       filter: saturate(1.05) contrast(1.05);
     }
     
+/* 2段目だけ右へ流す */
+.row2 .belt {
+  animation: slide-right 40s linear infinite;
+}
+
 /* 3段の行の高さを統一（好みで数値を変えてOK） */
 .bg {
   --row-height: 180px; /* ←ここを好みの高さに */
@@ -117,6 +122,24 @@
 
       </div>
     </div>
+    
+<!-- 2段目（右へ流れる） -->
+<div class="row row2">
+  <div class="belt">
+    <img src="item">row2/6.png</div>
+    <img src="item">row2/7.png</div>
+    <img src="item">row2/8.png</div>
+    <img src="item">row2/9.png</div>
+    <img src="item">row2/10.png</div>
+  
+  <img src="item">row2/6.png</div>
+    <img src="item">row2/7.png</div>
+    <img src="item">row2/8.png</div>
+    <img src="item">row2/9.png</div>
+    <img src="item">row2/10.png</div>
+  </div>
+</div>
+
   </div>
 
   <!-- 本文 -->
