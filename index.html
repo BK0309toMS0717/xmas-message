@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.15.5</title>
+<title>3段スライド背景 Ver.15</title>
+
 <style>
 html, body { margin:0; padding:0; }
 body { padding:20px; }
@@ -36,116 +37,96 @@ body { padding:20px; }
   will-change: transform;
 }
 
-/* 中段のみ右詰め */
+/* ★ Ver.15：2段目だけ右詰め */
 .row2 .belt {
   justify-content: flex-end;
 }
 
 .belt img {
-  height: 99%;  /* 段の高さに相対 */
+  height: 99%;
   width: auto;
   display: block;
   object-fit: contain;
 }
 
-main { position: relative; z-index:1; color:#fff; }
+main { position: relative; z-index:1; }
 </style>
 </head>
+
 <body>
 
 <div class="bg" aria-hidden="true">
 
-  <!-- 1段目 -->
+  <!-- 1段目（左に流れる） -->
   <div class="row row1">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row1/1.png" alt="Image 1">
-      <img src="assets/row1/2.png" alt="Image 2">
-      <img src="assets/row1/3.png" alt="Image 3">
-      <img src="assets/row1/4.png" alt="Image 4">
-      <img src="assets/row1/5.png" alt="Image 5">
+      <img src="assets/row1/1.png">
+      <img src="assets/row1/2.png">
+      <img src="assets/row1/3.png">
+      <img src="assets/row1/4.png">
+      <img src="assets/row1/5.png">
     </div>
   </div>
 
-  <!-- 2段目（右詰め） -->
+  <!-- 2段目（右に流れる・右詰め） -->
   <div class="row row2">
     <div class="belt js-loop" data-dir="right">
-      <img src="assets/row2/6.png" alt="Image 6">
-      <img src="assets/row2/7.png" alt="Image 7">
-      <img src="assets/row2/8.png" alt="Image 8">
-      <img src="assets/row2/9.png" alt="Image 9">
-      <img src="assets/row2/10.png" alt="Image 10">
+      <img src="assets/row2/6.png">
+      <img src="assets/row2/7.png">
+      <img src="assets/row2/8.png">
+      <img src="assets/row2/9.png">
+      <img src="assets/row2/10.png">
     </div>
   </div>
 
-  <!-- 3段目 -->
+  <!-- 3段目（左に流れる） -->
   <div class="row row3">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row3/11.png" alt="Image 11">
-      <img src="assets/row3/12.png" alt="Image 12">
-      <img src="assets/row3/13.png" alt="Image 13">
-      <img src="assets/row3/14.png" alt="Image 14">
-      <img src="assets/row3/15.png" alt="Image 15">
+      <img src="assets/row3/11.png">
+      <img src="assets/row3/12.png">
+      <img src="assets/row3/13.png">
+      <img src="assets/row3/14.png">
+      <img src="assets/row3/15.png">
     </div>
   </div>
 
 </div>
 
 <main>
-  <h1>メッセージ Ver.15.5</h1>
-  <p>完全レスポンシブ・全段無限ループ・40秒1周</p>
+  <h1>メッセージ Ver.15</h1>
+  <p>中段のみ右詰め</p>
 </main>
 
 <script>
-const duration = 40000; // 40秒で1周
-
-function setupLoop(belt) {
+document.querySelectorAll('.js-loop').forEach(belt => {
   const dir = belt.dataset.dir === 'right' ? 1 : -1;
+  const duration = 40000;
 
-  // 元HTMLを保存
-  if (!belt.dataset.original) {
-    belt.dataset.original = belt.innerHTML;
-  } else {
-    belt.innerHTML = belt.dataset.original;
-  }
+  belt.innerHTML += belt.innerHTML;
 
-  const images = Array.from(belt.querySelectorAll('img'));
+  let baseWidth;
 
-  // すべての画像が読み込まれるのを待つ
-  const promises = images.map(img => {
-    if (img.complete) return Promise.resolve();
-    return new Promise(resolve => img.onload = resolve);
-  });
+  const update = () => {
+    baseWidth = belt.scrollWidth / 2;
+  };
 
-  Promise.all(promises).then(() => {
-    // 複製前の1周幅を計算
-    let originalWidth = 0;
-    images.forEach(img => originalWidth += img.offsetWidth);
+  window.addEventListener('resize', update);
+  update();
 
-    // 横幅が画面幅の2倍以上になるまで複製
-    while (belt.scrollWidth < window.innerWidth * 2) {
-      belt.appendChild(belt.cloneNode(true));
+  const loop = () => {
+    const t = (performance.now() / duration) % 1;
+    const offset = t * baseWidth;
+
+    if (dir === -1) {
+      belt.style.transform = `translateX(${-offset}px)`;
+    } else {
+      belt.style.transform = `translateX(${offset - baseWidth}px)`;
     }
 
-    // アニメーションループ
-    const loop = () => {
-      const t = (performance.now() % duration) / duration;
-      const x = t * originalWidth * dir;
-      belt.style.transform = `translateX(${x}px)`;
-      requestAnimationFrame(loop);
-    };
-    loop();
-  });
-}
+    requestAnimationFrame(loop);
+  };
 
-// 初回セットアップ
-document.querySelectorAll('.js-loop').forEach(belt => setupLoop(belt));
-
-// 画面サイズ変更時に belt を再構築
-window.addEventListener('resize', () => {
-  document.querySelectorAll('.js-loop').forEach(belt => {
-    belt.style.transform = 'translateX(0)';
-    setupLoop(belt);
-  });
+  loop();
 });
 </script>
 
