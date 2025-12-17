@@ -3,19 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.15.1.2</title>
-
+<title>3段スライド背景 Ver.15.1.1 + transform修正版</title>
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-}
+html, body { margin:0; padding:0; }
+body { padding:20px; }
 
-body {
-  padding: 20px;
-}
-
-/* 背景全体 */
 .bg {
   position: fixed;
   inset: 0;
@@ -23,24 +15,20 @@ body {
   background-color: #6b76ae;
   pointer-events: none;
   overflow: hidden;
-
   --row-height: 33.333vh;
 }
 
-/* 各段 */
 .row {
   position: absolute;
-  left: 0;
-  right: 0;
+  left:0; right:0;
   height: var(--row-height);
   overflow: hidden;
 }
 
-.row1 { top: 0; }
+.row1 { top:0; }
 .row2 { top: var(--row-height); }
-.row3 { top: calc(var(--row-height) * 2); }
+.row3 { top: calc(var(--row-height)*2); }
 
-/* ベルト（段いっぱいの高さ） */
 .belt {
   display: flex;
   align-items: center;
@@ -48,95 +36,92 @@ body {
   will-change: transform;
 }
 
-/* ★ 2段目のみ右詰め */
 .row2 .belt {
-  justify-content: flex-end;
+  justify-content: flex-end; /* 中段のみ右詰め */
 }
 
-/* 画像サイズ統一 */
 .belt img {
-  height: 99%;      /* 各段の99% */
-  width: auto;      /* 縦横比維持 */
+  height: 99%;
+  width: auto;
   display: block;
   object-fit: contain;
 }
 
-main {
-  position: relative;
-  z-index: 1;
-}
+main { position: relative; z-index:1; }
 </style>
 </head>
-
 <body>
 
 <div class="bg" aria-hidden="true">
 
-  <!-- 1段目（左へ） -->
+  <!-- 1段目 -->
   <div class="row row1">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row1/1.png">
-      <img src="assets/row1/2.png">
-      <img src="assets/row1/3.png">
-      <img src="assets/row1/4.png">
-      <img src="assets/row1/5.png">
+      <img src="assets/row1/1.png" alt="1">
+      <img src="assets/row1/2.png" alt="2">
+      <img src="assets/row1/3.png" alt="3">
+      <img src="assets/row1/4.png" alt="4">
+      <img src="assets/row1/5.png" alt="5">
     </div>
   </div>
 
-  <!-- 2段目（右へ・右詰め） -->
+  <!-- 2段目（右詰め・右向き） -->
   <div class="row row2">
     <div class="belt js-loop" data-dir="right">
-      <img src="assets/row2/6.png">
-      <img src="assets/row2/7.png">
-      <img src="assets/row2/8.png">
-      <img src="assets/row2/9.png">
-      <img src="assets/row2/10.png">
+      <img src="assets/row2/6.png" alt="6">
+      <img src="assets/row2/7.png" alt="7">
+      <img src="assets/row2/8.png" alt="8">
+      <img src="assets/row2/9.png" alt="9">
+      <img src="assets/row2/10.png" alt="10">
     </div>
   </div>
 
-  <!-- 3段目（左へ） -->
+  <!-- 3段目 -->
   <div class="row row3">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row3/11.png">
-      <img src="assets/row3/12.png">
-      <img src="assets/row3/13.png">
-      <img src="assets/row3/14.png">
-      <img src="assets/row3/15.png">
+      <img src="assets/row3/11.png" alt="11">
+      <img src="assets/row3/12.png" alt="12">
+      <img src="assets/row3/13.png" alt="13">
+      <img src="assets/row3/14.png" alt="14">
+      <img src="assets/row3/15.png" alt="15">
     </div>
   </div>
 
 </div>
 
 <main>
-  <h1>メッセージ Ver.15.1.2</h1>
-  <p>各段の高さ99%で画像サイズ統一</p>
+  <h1>メッセージ Ver.15.1.1 + transform修正版</h1>
+  <p>中段も右詰め・右向きで滑らかに流れる</p>
 </main>
 
 <script>
+// 画像高さを段の99%に統一
+function updateImageSize() {
+  document.querySelectorAll('.js-loop').forEach(belt => {
+    const row = belt.parentElement;
+    const rowHeight = row.clientHeight;
+    belt.querySelectorAll('img').forEach(img => {
+      img.style.height = rowHeight * 0.99 + 'px';
+    });
+  });
+}
+updateImageSize();
+window.addEventListener('resize', updateImageSize);
+
+// ループ処理（transform部分だけ Ver.15.2 方式に変更）
 document.querySelectorAll('.js-loop').forEach(belt => {
   const dir = belt.dataset.dir === 'right' ? 1 : -1;
   const duration = 40000;
 
-  belt.innerHTML += belt.innerHTML;
-
-  let baseWidth;
-
-  const update = () => {
-    baseWidth = belt.scrollWidth / 2;
-  };
-
-  window.addEventListener('resize', update);
-  update();
+  belt.innerHTML += belt.innerHTML; // 複製して無限ループ
+  const w = belt.scrollWidth / 2;
 
   const loop = () => {
-    const t = (performance.now() / duration) % 1;
-    const offset = t * baseWidth;
+    const t = (performance.now() % duration) / duration;
 
-    if (dir === -1) {
-      belt.style.transform = `translateX(${-offset}px)`;
-    } else {
-      belt.style.transform = `translateX(${-(baseWidth - offset)}px)`;
-    }
+    // ← ここを Ver.15.2 方式に上書き
+    const x = t * w * dir;
+    belt.style.transform = `translateX(${x}px)`;
 
     requestAnimationFrame(loop);
   };
