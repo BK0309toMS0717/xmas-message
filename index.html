@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.15.2</title>
+<title>3段スライド背景 Ver.15.3</title>
 <style>
 html, body { margin:0; padding:0; }
 body { padding:20px; }
@@ -91,8 +91,8 @@ main { position: relative; z-index:1; }
 </div>
 
 <main>
-  <h1>メッセージ Ver.15.2</h1>
-  <p>全段1周で無限ループ</p>
+  <h1>メッセージ Ver.15.3</h1>
+  <p>全段無限ループ・画面幅補正済み・40秒1周</p>
 </main>
 
 <script>
@@ -110,15 +110,17 @@ function updateImageSize() {
 updateImageSize();
 window.addEventListener('resize', updateImageSize);
 
-// ループ処理（時間ベース）
+// 無限ループ処理
 document.querySelectorAll('.js-loop').forEach(belt => {
   const dir = belt.dataset.dir === 'right' ? 1 : -1;
-  const duration = 40 * 1000;
+  const duration = 40 * 1000; // 40秒で1周
 
-  // HTML上は1周分だけ、JSで複製して無限ループ
-  belt.innerHTML += belt.innerHTML;
+  // beltの横幅が画面幅の2倍以上になるまで複製
+  while (belt.scrollWidth < window.innerWidth * 2) {
+    belt.innerHTML += belt.innerHTML;
+  }
 
-  const w = belt.scrollWidth / 2;
+  const w = belt.scrollWidth / 2; // 元の1周分の幅
 
   const loop = () => {
     const t = (performance.now() % duration) / duration;
@@ -126,7 +128,6 @@ document.querySelectorAll('.js-loop').forEach(belt => {
     belt.style.transform = `translateX(${x}px)`;
     requestAnimationFrame(loop);
   };
-
   loop();
 });
 </script>
