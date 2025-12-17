@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3段スライド背景 Ver.15.2</title>
+<title>3段スライド背景 Ver.15.5</title>
 <style>
 html, body { margin:0; padding:0; }
 body { padding:20px; }
@@ -42,7 +42,7 @@ body { padding:20px; }
 }
 
 .belt img {
-  height: 99%;
+  height: 99%;  /* 段の高さに相対 */
   width: auto;
   display: block;
   object-fit: contain;
@@ -55,7 +55,7 @@ main { position: relative; z-index:1; }
 
 <div class="bg" aria-hidden="true">
 
-  <!-- 1段目（左に流れる） -->
+  <!-- 1段目 -->
   <div class="row row1">
     <div class="belt js-loop" data-dir="left">
       <img src="assets/row1/1.png" alt="Image 1">
@@ -66,7 +66,7 @@ main { position: relative; z-index:1; }
     </div>
   </div>
 
-  <!-- 2段目（右に流れる・右詰め） -->
+  <!-- 2段目（右詰め） -->
   <div class="row row2">
     <div class="belt js-loop" data-dir="right">
       <img src="assets/row2/6.png" alt="Image 6">
@@ -77,7 +77,7 @@ main { position: relative; z-index:1; }
     </div>
   </div>
 
-  <!-- 3段目（左に流れる） -->
+  <!-- 3段目 -->
   <div class="row row3">
     <div class="belt js-loop" data-dir="left">
       <img src="assets/row3/11.png" alt="Image 11">
@@ -91,43 +91,48 @@ main { position: relative; z-index:1; }
 </div>
 
 <main>
-  <h1>メッセージ Ver.15.2</h1>
-  <p>全段1周で無限ループ</p>
+  <h1>メッセージ Ver.15.5</h1>
+  <p>完全レスポンシブ・全段無限ループ・40秒1周</p>
 </main>
 
 <script>
-// 画像高さを段の99%に統一
-function updateImageSize() {
-  document.querySelectorAll('.js-loop').forEach(belt => {
-    const row = belt.parentElement;
-    const rowHeight = row.clientHeight;
-    belt.querySelectorAll('img').forEach(img => {
-      img.style.height = rowHeight * 0.99 + 'px';
-    });
-  });
-}
+const duration = 40000; // 40秒で1周
 
-updateImageSize();
-window.addEventListener('resize', updateImageSize);
-
-// ループ処理（時間ベース）
-document.querySelectorAll('.js-loop').forEach(belt => {
+function setupLoop(belt) {
   const dir = belt.dataset.dir === 'right' ? 1 : -1;
-  const duration = 40 * 1000;
 
-  // HTML上は1周分だけ、JSで複製して無限ループ
-  belt.innerHTML += belt.innerHTML;
+  // 複製前の1周幅を計算
+  const images = Array.from(belt.querySelectorAll('img'));
+  let originalWidth = 0;
+  images.forEach(img => originalWidth += img.offsetWidth);
 
-  const w = belt.scrollWidth / 2;
+  // 横幅が画面幅の2倍以上になるまで複製
+  while (belt.scrollWidth < window.innerWidth * 2) {
+    belt.innerHTML += belt.innerHTML;
+  }
 
   const loop = () => {
     const t = (performance.now() % duration) / duration;
-    const x = t * w * dir;
+    const x = t * originalWidth * dir;
     belt.style.transform = `translateX(${x}px)`;
     requestAnimationFrame(loop);
   };
-
   loop();
+}
+
+// 初回セットアップ
+document.querySelectorAll('.js-loop').forEach(belt => setupLoop(belt));
+
+// 画面サイズ変更時に belt を再構築
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.js-loop').forEach(belt => {
+    // belt をリセット
+    const row = belt.parentElement;
+    const html = belt.innerHTML;
+    belt.innerHTML = html; // 元の1周分だけ残す
+    belt.style.transform = 'translateX(0)';
+    setupLoop(belt);
+  });
 });
 </script>
 
