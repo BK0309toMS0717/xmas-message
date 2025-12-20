@@ -1,9 +1,11 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>12/23までに完成させるぺージ</title>
+  <title>スムーズループ背景 - ver.6.1</title>
+  <!-- ver.6.1: 中段(row2)のみ「右から並べて右へ流す」に対応 -->
   <style>
     html, body { margin: 0; padding: 0; }
     body { padding: 20px; }
@@ -12,10 +14,10 @@
       position: fixed;
       inset: 0;
       z-index: -1;
-      background-color: #6b76ae;
+      background-color: #6b76ae; /* 指定の背景色 */
       pointer-events: none;
       overflow: hidden;
-      --row-height: 33.333vh;
+      --row-height: 33.333vh; /* 画面を3等分 */
     }
 
     .row {
@@ -37,9 +39,14 @@
       will-change: transform;
     }
 
+    /* ver.6.1 追加：右向きデータの帯は右から並べる */
+    .belt[data-dir="right"] {
+      flex-direction: row-reverse; /* 右端に最初の画像が来る並びにする */
+    }
+
     .belt img {
-      height: 99%;
-      width: auto;
+      height: 99%;      /* 各段の高さに合わせてほぼいっぱいに */
+      width: auto;      /* 縦横比を維持 */
       display: block;
       object-fit: contain;
     }
@@ -51,98 +58,90 @@
 
 <div class="bg" aria-hidden="true">
 
-  <!-- 1段目 -->
+  <!-- 1段目（左へ） -->
   <div class="row row1">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row1/1.png" alt="1">
-      <img src="assets/row1/2.png" alt="2">
-      <img src="assets/row1/3.png" alt="3">
-      <img src="assets/row1/4.png" alt="4">
-      <img src="assets/row1/5.png" alt="5">
+      assets/row1/1.png
+      assets/row1/2.png
+      assets/row1/3.png
+      assets/row1/4.png
+      assets/row1/5.png
     </div>
   </div>
 
-  <!-- 2段目 -->
+  <!-- 2段目（右へ）※ver.6.1：右から並べて右へ流れる -->
   <div class="row row2">
     <div class="belt js-loop" data-dir="right">
-      <img src="assets/row2/6.png" alt="6">
-      <img src="assets/row2/7.png" alt="7">
-      <img src="assets/row2/8.png" alt="8">
-      <img src="assets/row2/9.png" alt="9">
-      <img src="assets/row2/10.png" alt="10">
+      assets/row2/6.png
+      assets/row2/7.png
+      assets/row2/8.png
+      <img src="assets/
+      assets/row2/10.png
     </div>
   </div>
 
-  <!-- 3段目 -->
+  <!-- 3段目（左へ） -->
   <div class="row row3">
     <div class="belt js-loop" data-dir="left">
-      <img src="assets/row3/11.png" alt="11">
-      <img src="assets/row3/12.png" alt="12">
-      <img src="assets/row3/13.png" alt="13">
-      <img src="assets/row3/14.png" alt="14">
-      <img src="assets/row3/15.png" alt="15">
+      assets/row3/11.png
+      assets/row3/12.png
+      assets/row3/13.png
+      assets/row3/14.png
+      assets/row3/15.png
     </div>
   </div>
 
 </div>
 
 <main>
-  <h1>ver.6</h1>  
-  <p>背景調整中</p>
+  <h1>スムーズループ背景（ver.6.1）</h1>
+  <p>中段は右端から並べて右へ流れます。どんなに横長のディスプレイでも継ぎ目なくループします。</p>
 </main>
 
 <script>
-// 画像高さを段の99%に統一
+/* === ver.6.1 スクリプト === */
+
+// 画像高さを段の99%に統一（縦横比維持）
 function updateImageSize() {
   document.querySelectorAll('.js-loop').forEach(belt => {
     const row = belt.parentElement;
     const rowHeight = row.clientHeight;
     belt.querySelectorAll('img').forEach(img => {
-      img.style.height = rowHeight * 0.99 + 'px';
+      img.style.height = (rowHeight * 0.99) + 'px';
     });
   });
 }
 updateImageSize();
 window.addEventListener('resize', updateImageSize);
 
-// ループ処理（画像を繰り返す方式で修正）
+// ループ処理：画像を複製して2セット化し、1セット分(L)の範囲で移動してシームレス化
 document.querySelectorAll('.js-loop').forEach(belt => {
-  const dir = belt.dataset.dir === 'right' ? 1 : -1;
-  const duration = 40000;
+  const dir = belt.dataset.dir === 'right' ? 1 : -1; // right=1, left=-1
+  const duration = 40000; // ミリ秒（速度調整可）
 
-  // 画像を複製して無限ループ
-  const images = belt.querySelectorAll('img');
-  images.forEach(img => belt.appendChild(img.cloneNode(true))); // 画像を複製
-
-  // belt の幅を計算
-  const updateBeltWidth = () => {
-    let totalWidth = 0;
-    belt.querySelectorAll('img').forEach(img => {
-      totalWidth += img.offsetWidth; // 画像の合計幅を計算
-    });
-    belt.style.width = totalWidth + 'px'; // belt の幅を設定
-  };
-  
-  updateBeltWidth();
-  window.addEventListener('resize', updateBeltWidth);
+  // 画像を複製（1セット + もう1セット）
+  const originals = belt.querySelectorAll('img');
+  originals.forEach(img => belt.appendChild(img.cloneNode(true)));
 
   const loop = () => {
-    const t = (performance.now() % duration) / duration;
-    const scrollWidth = belt.scrollWidth / 2; // belt の実際の幅の半分
-    let x = t * scrollWidth * dir; // スクロールする位置
+    const t = (performance.now() % duration) / duration; // 0..1
+    const L = belt.scrollWidth / 2;                       // 1セット分の長さ
 
-    // 中段 (row2) の場合、最初に右端から始める
-    if (belt.classList.contains('row2')) {
-      // 最初の位置を右詰めに設定
-      x = x + scrollWidth; // 右端から流れ始めるように調整
-    }
+    // translateX は常に [-L, 0) に収めるのがコツ
+    // 左向き（dir = -1）： 0 → -L
+    // 右向き（dir =  1）：-L →  0（右端スタートの見え方になる）
+    const x = (dir === -1) ? (-t * L) : (-L + t * L);
 
-    belt.style.transform = `translateX(${x}px)`; // 横移動させる
-
-    requestAnimationFrame(loop); // アニメーションをループ
+    belt.style.transform = `translateX(${x}px)`;
+    requestAnimationFrame(loop);
   };
 
   loop();
+
+  // リサイズ時も綺麗に再計算
+  window.addEventListener('resize', () => {
+    requestAnimationFrame(loop);
+  });
 });
 </script>
 
