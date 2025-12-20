@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ver.16</title>
+  <title>12/23までに完成させるぺージ</title>
   <style>
     html, body { margin: 0; padding: 0; }
     body { padding: 20px; }
@@ -87,8 +87,8 @@
 </div>
 
 <main>
-  <h1>スムーズループ背景</h1>
-  <p>どんなに横長のディスプレイでも余白なしでループします。</p>
+  <h1>ver.6</h1>  
+  <p>背景調整中</p>
 </main>
 
 <script>
@@ -134,7 +134,7 @@ document.querySelectorAll('.js-loop').forEach(belt => {
     // 中段 (row2) の場合、最初に右端から始める
     if (belt.classList.contains('row2')) {
       // 最初の位置を右詰めに設定
-      x = x + scrollWidth;
+      x = x + scrollWidth; // 右端から流れ始めるように調整
     }
 
     belt.style.transform = `translateX(${x}px)`; // 横移動させる
