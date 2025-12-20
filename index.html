@@ -1,51 +1,51 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>スムーズループ背景</title>
-<style>
-  html, body { margin: 0; padding: 0; }
-  body { padding: 20px; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ver.16</title>
+  <style>
+    html, body { margin: 0; padding: 0; }
+    body { padding: 20px; }
 
-  .bg {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background-color: #6b76ae;
-    pointer-events: none;
-    overflow: hidden;
-    --row-height: 33.333vh;
-  }
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-color: #6b76ae;
+      pointer-events: none;
+      overflow: hidden;
+      --row-height: 33.333vh;
+    }
 
-  .row {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: var(--row-height);
-    overflow: hidden;
-    display: flex;
-  }
+    .row {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: var(--row-height);
+      overflow: hidden;
+      display: flex;
+    }
 
-  .row1 { top: 0; }
-  .row2 { top: var(--row-height); }
-  .row3 { top: calc(var(--row-height) * 2); }
+    .row1 { top: 0; }
+    .row2 { top: var(--row-height); }
+    .row3 { top: calc(var(--row-height) * 2); }
 
-  .belt {
-    display: flex;
-    align-items: center;
-    will-change: transform;
-  }
+    .belt {
+      display: flex;
+      align-items: center;
+      will-change: transform;
+    }
 
-  .belt img {
-    height: 99%;
-    width: auto;
-    display: block;
-    object-fit: contain;
-  }
+    .belt img {
+      height: 99%;
+      width: auto;
+      display: block;
+      object-fit: contain;
+    }
 
-  main { position: relative; z-index: 1; }
-</style>
+    main { position: relative; z-index: 1; }
+  </style>
 </head>
 <body>
 
@@ -129,7 +129,14 @@ document.querySelectorAll('.js-loop').forEach(belt => {
   const loop = () => {
     const t = (performance.now() % duration) / duration;
     const scrollWidth = belt.scrollWidth / 2; // belt の実際の幅の半分
-    const x = t * scrollWidth * dir; // スクロールする位置
+    let x = t * scrollWidth * dir; // スクロールする位置
+
+    // 中段 (row2) の場合、最初に右端から始める
+    if (belt.classList.contains('row2')) {
+      // 最初の位置を右詰めに設定
+      x = x + scrollWidth;
+    }
+
     belt.style.transform = `translateX(${x}px)`; // 横移動させる
 
     requestAnimationFrame(loop); // アニメーションをループ
